@@ -1,2 +1,5 @@
 ## maven
 target/
+
+## redis
+dump.rdb
