@@ -74,14 +74,14 @@ For the data base we use Redis as the name indicates, more precisely we use sets
 The sets that are used follow a very specific notation:
 
 username ---- password
-					 |
-					 -- followers
-  				 	 |
-					 -- following
-					 |
-					 -- messages
-					 |
-					 -- isUser
+			|
+			-- followers
+			|
+			-- following
+			|
+			-- messages
+			|
+			-- isUser
 
 # Special set used for online tracking:
 IsOnline ---- username
