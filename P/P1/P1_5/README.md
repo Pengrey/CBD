@@ -52,7 +52,7 @@ mvn exec:java -Dexec.mainClass="jedis_chat.app.Client" -Dexec.args="-p"
 output:
 
 ```bash
-			_____          _ _       ______                         
+	    _____          _ _       ______                         
            |  __ \        | (_)     |  ____|                        
            | |__) |___  __| |_ ___  | |__ ___  _ __ _   _ _ __ ___  
            |  _  // _ \/ _` | / __| |  __/ _ \| '__| | | | '_ ` _ \ 
@@ -85,14 +85,14 @@ The sets that are used follow a very specific notation:
 
 ```bash
 username ---- password
-					 |
-					 -- followers
-  				     |
-					 -- following
-					 |
-					 -- messages
-					 |
-					 -- isUser
+	    |
+	    -- followers
+  	    |
+	    -- following
+	    |
+	    -- messages
+	    |
+	    -- isUser
 
 # Special set used for online tracking:
 IsOnline ---- username
