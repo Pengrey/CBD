@@ -1,4 +1,4 @@
-package com.jedis_chat.app; 
+package jedis_chat.app; 
 import redis.clients.jedis.Jedis; 
 
 public class Server 
