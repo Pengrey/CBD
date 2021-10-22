@@ -5,7 +5,7 @@ This project is a redis DB based chat forum written in java with the help of the
 Features
 
 +-----------------------------------------------------------------------------+
-|Commands:                                                                    |
+| Commands:                                                                   |
 +--------------------------------------+--------------------------------------+
 | login                                | Start login progress                 |
 | create                               | Start account creation process       |
@@ -53,7 +53,7 @@ output:
 +-----------------------------------------------------------------------------+
 |####################################Login####################################|
 +-----------------------------------------------------------------------------+
-|Commands:                                                                    |
+| Commands:                                                                   |
 +--------------------------------------+--------------------------------------+
 | login                                | Start login progress                 |
 | create                               | Start account creation process       |
@@ -76,7 +76,7 @@ The sets that are used follow a very specific notation:
 username ---- password
 					 |
 					 -- followers
-  				 |
+  				 	 |
 					 -- following
 					 |
 					 -- messages
