@@ -35,25 +35,25 @@ db.restaurants.find({ $and: [{"grades.score":{$gt:85}}]})
 
 // 7. Encontre os restaurantes que obtiveram uma ou mais pontuações (score) entre [80 e 100].
 
-db.restaurants.find({$and:[ {"grades.score":{$gte:80}}, {"grades.score":{$lte:100}} ]})
+db.restaurants.find({grades:{$elemMatch:{score: {$gte: 80, $lte: 100}}}})
 
-// 5
+// 4
 
 // 8. Indique os restaurantes com latitude inferior a -95,7.
 
-db.restaurants.find({$and:[ {"address.coord.1":{$lt:-95.7}} ]})
+db.restaurants.find({$and:[ {"address.coord.0":{$lt:-95.7}} ]})
 
 // 0
 
 // 9. Indique os restaurantes que não têm gastronomia "American", tiveram uma (ou mais) pontuação superior a 70 e estão numa latitude inferior a -65.
 
-db.restaurants.find({$and:[ {"address.coord.1":{$lt:-65}}, {"grades.score":{$gte:70}}, {"gastronomia":{$nin:["American"]}}]})
+db.restaurants.find({$and:[ {"address.coord.0":{$lt:-65}}, {"grades.score":{$gte:70}}, {"gastronomia":{$nin:["American"]}}]})
 
 // 0
 
 // 10. Liste o restaurant_id, o nome, a localidade e gastronomia dos restaurantes cujo nome começam por "Wil".
 
-db.restaurants.find({$and:[ {"nome":{$regex:'^Wil'}} ]},{"nome":1, "localidade":1, "gastronomia":1, _id:0})
+db.restaurants.find({$and:[ {"nome":{$regex:'^Wil'}} ]},{"restaurant_id":1,"nome":1, "localidade":1, "gastronomia":1, _id:0})
 
 // 3
 
@@ -89,7 +89,7 @@ db.restaurants.find({$and:[ {"grades.1.date": ISODate("2014-08-11T00:00:00Z")}, 
 
 // 16. Liste o restaurant_id, o nome, o endereço (address) e as coordenadas geográficas (coord) dos restaurantes onde o 2º elemento da matriz de coordenadas tem um valor superior a 42 e inferior ou igual a 52.
 
-db.restaurants.find({$and:[ {"address.coord.1":{$gt:42}}, {"address.coord.1":{$lte:52}} ]}, {"restaurant_id":1, "nome":1, "address":1, _id:0})
+db.restaurants.find({$and:[ {"address.coord.0":{$gt:42}}, {"address.coord.0":{$lte:52}} ]}, {"restaurant_id":1, "nome":1, "address":1, _id:0})
 
 //  7
 
@@ -107,32 +107,79 @@ db.restaurants.find({$and:[ {"localidade":"Brooklyn"}, {"gastronomia":{$not: {$e
 
 // 19. Conte o total de restaurante existentes em cada localidade.
 
-db.restaurants.aggregate([{$group: { _id: "$localidade"}, total: { $sum: 1}}])
+db.restaurants.aggregate({ $group:{ _id:"$localidade"  , count:{$sum:1} } } )
 
-// ?????
+// { "_id" : "Manhattan", "count" : 1883 }
+
+// { "_id" : "Brooklyn", "count" : 684 }
+
+// { "_id" : "Bronx", "count" : 309 }
+
+// { "_id" : "Queens", "count" : 738 }
+
+// { "_id" : "Staten Island", "count" : 158 }
 
 // 20. Liste todos os restaurantes cuja média dos score é superior a 30.
 
-db.restaurants.aggregate([{$group: { _id: "$nome"}, total: { $avg: "$grades.score"}}])
+db.restaurants.aggregate([{$addFields:{average: {$avg: "$grades.score"}}},{$match: {average:{$gt: 30}}}])
 
-// ?????
+// 
 
 // 21. Indique os restaurantes que têm gastronomia "Portuguese", o somatório de score é superior a 50 e estão numa latitude inferior a -60.
 
+db.restaurants.aggregate([{$addFields:{sum: {$sum: "$grades.score"}}},{$match: {sum:{$gt: 50}, "gastronomia":"Portuguese", "address.coord.0":{$lt:-60}}}])
+
+// 
+
 // 22: Apresente o nome e o score dos 3 restaurantes com score médio mais elevado.
+
+db.restaurants.aggregate([{$addFields:{average: {$avg: "$grades.score"}}}, { $sort : { average : -1 } }, {$limit:3}, {$project: { _id:0, "nome":1,"grades.score":1}}])
+
+//
 
 // 23. Apresente o número de gastronomias diferentes na rua "Fifth Avenue"
 
+db.restaurants.aggregate([{$match : {"address.rua" : "Fifth Avenue"}},{$group:{ _id:"$gastronomia"} } ])
+
+// { "_id" : "Latin (Cuban, Dominican, Puerto Rican, South & Central American)" }
+// { "_id" : "American" }
+// { "_id" : "Irish" }
+// { "_id" : "Sandwiches/Salads/Mixed Buffet" }
+
 // 24. Conte quantos restaurantes existem por rua e ordene por ordem decrescente
+
+db.restaurants.aggregate([{$group:{ _id:"$address.rua", count:{$sum:1}}}])
+
+// 
 
 // 25. .. 30. Descreva 5 perguntas adicionais à base dados (alíneas 26 a 30) e apresente igualmente a solução de pesquisa para cada questão.
 
-// 26.
+// 26. Se acedesse vária vezes a gastronomia de cada restaurante em queries o que faria? 
 
-// 27.
+db.restaurants.createIndex( { gastronomia: 1} )
 
-// 28.
+// 
 
-// 29.
+// 27. Se acedesse vária vezes as grades de cada restaurante e o seu melhor score o que faria?
 
-// 30.
+db.restaurants.createIndex( { grades: 1, score:-1} )
+
+// 
+
+// 28. Todos os restaurantes que tenham pelo menos uma grade A
+
+db.restaurants.find({grades:{$elemMatch:{grade:"A"}}})
+
+// 
+
+// 29. Todos os restaurantes que tenham pelo menos uma grade A e que tenham localidade em Manhattan
+
+db.restaurants.find( {$and:[{grades:{$elemMatch:{grade:"A"}}}, {"localidade":"Manhattan"} ]})
+
+// 
+
+// 30. Devolve todos os restaurantes com a sua output identada
+
+db.restaurants.find().pretty()
+
+//
