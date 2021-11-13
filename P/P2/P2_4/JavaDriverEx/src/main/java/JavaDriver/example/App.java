@@ -1,12 +1,18 @@
 package JavaDriver.example;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
-import com.mongodb.AggregationOutput;
+import javax.print.Doc;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
+import com.mongodb.ExplainVerbosity;
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
@@ -108,12 +114,53 @@ public class App
     }
 
     public static int countLocalidade(MongoCollection<Document> collection){
-        BasicDBObject newDocument = new BasicDBObject();
-        //newDocument.append("$group", new BasicDBObject().append("_id","$localidade").append("noRestaurants", new BasicDBObject().append("$sum",1)));
-        //AggregateIterable<Document> iter = collection.aggregate(Arrays.asList(newDocument));
-        AggregateIterable<Document> iter = collection.aggregate(Arrays.asList(Aggregates.group("$" + "localidade", Accumulators.sum("sum", "$" + 1))));
+        List<Document> l = new ArrayList<Document>();
 
-        return iter.first().getInteger("sum", 0);
+        AggregateIterable<Document> col = collection.aggregate(
+            Arrays.asList(
+                Aggregates.group("$localidade")
+            )
+        );
+        Integer result = 1;
+        Iterator it = col.iterator();
+        while (it.hasNext()) {
+            result++;
+            it.next();
+        }
+        return result;
+    }
+
+    public static Map<String, Integer> countRestByLocalidade(MongoCollection<Document> collection){
+        Map<String, Integer> localidades = new HashMap();
+        AggregateIterable<Document> col = collection.aggregate(
+            Arrays.asList(
+                Aggregates.group("$localidade", Accumulators.sum("count", 1))
+            )
+        );
+        Iterator it = col.iterator();
+
+        while (it.hasNext()) {
+            String[] iter = it.next().toString().replace("Document{{_id=", "").split(", ");
+            Integer count = Integer.parseInt(iter[1].replace("count=", "").replace("}}", ""));
+            localidades.put(iter[0], count);
+        }
+        return localidades;
+    }
+
+    public static List<String> getRestWithNameCloserTo(String name, MongoCollection<Document> collection){
+        List<String> result = new ArrayList<>();
+        AggregateIterable<Document> col = collection.aggregate(
+            Arrays.asList(
+                Aggregates.match(Filters.regex("nome", name))
+            )
+        );
+        Iterator it = col.iterator();
+        while (it.hasNext()) {
+            String[] iter = it.next().toString().split("nome=");
+            String[] iter2= iter[1].split(", restaurant_id=");
+            result.add(iter2[0]);
+        }
+        return result;
     }
 
     public static void main(String[] args) {
@@ -172,7 +219,24 @@ public class App
 
             // public int countLocalidades() 
             System.out.println("\npublic int countLocalidades()\n");
-            System.out.println(countLocalidade(collection));
+            System.out.println("Numero de localidades distintas: " + countLocalidade(collection));
+
+            // Map<String, Integer> countRestByLocalidade()  
+            // System.out.println("\nMap<String, Integer> countRestByLocalidade()\n");
+            Map<String, Integer> resultMap = countRestByLocalidade(collection);
+            System.out.println("\nNumero de restaurantes por localidade:");
+            for (String string : resultMap.keySet()) {
+                System.out.println("-> " + string + " - " + resultMap.get(string));
+            }
+
+            // List<String> getRestWithNameCloserTo(String name) 
+            // System.out.println("\nMap<String, Integer> countRestByLocalidade()\n");
+            String name = "Park";
+            List<String> result = getRestWithNameCloserTo(name, collection);
+            System.out.println("\nNome de restaurantes contendo 'Park' no nome:");
+            for (String rest : result) {
+                System.out.println("-> " + rest);
+            }
         }
     }
 }
