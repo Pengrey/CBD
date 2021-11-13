@@ -1,15 +1,21 @@
 package JavaDriver.example;
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
+import com.mongodb.AggregationOutput;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
+import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Accumulators;
+import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Indexes;
 import com.mongodb.client.model.Projections;
@@ -101,6 +107,15 @@ public class App
         System.out.println(String.format("Index created: %s", resultCreateIndex2));
     }
 
+    public static int countLocalidade(MongoCollection<Document> collection){
+        BasicDBObject newDocument = new BasicDBObject();
+        //newDocument.append("$group", new BasicDBObject().append("_id","$localidade").append("noRestaurants", new BasicDBObject().append("$sum",1)));
+        //AggregateIterable<Document> iter = collection.aggregate(Arrays.asList(newDocument));
+        AggregateIterable<Document> iter = collection.aggregate(Arrays.asList(Aggregates.group("$" + "localidade", Accumulators.sum("sum", "$" + 1))));
+
+        return iter.first().getInteger("sum", 0);
+    }
+
     public static void main(String[] args) {
         // Connect to server
         String uri = "mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000";
@@ -154,6 +169,10 @@ public class App
             // 8. Indique os restaurantes com latitude inferior a -95,7. 
             System.out.println("\n8. Indique os restaurantes com latitude inferior a -95,7.\n");
             findAllsmallLat(collection);
+
+            // public int countLocalidades() 
+            System.out.println("\npublic int countLocalidades()\n");
+            System.out.println(countLocalidade(collection));
         }
     }
 }
