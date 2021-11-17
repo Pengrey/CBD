@@ -1,0 +1,87 @@
+// 2.5
+ 
+// a)
+// Dataset from:
+// https://github.com/dscarlat/m220/blob/master/data/mflix/movies.bson.gz
+// import dataset:
+// gzip -d movies.bson.gz
+// mongorestore --drop -d cbd -c movies ./movies.bson
+
+// b)
+// number of documents: 46014
+// document structure:
+//{
+//	"_id" : ObjectId("573a1390f29313caabcd421c"),
+//	"title" : "A Turn of the Century Illusionist",
+//	"year" : 1899,
+//	"runtime" : 1,
+//	"cast" : [
+//		"Georges Mèliès"
+//	],
+//	"lastupdated" : "2015-08-29 00:21:21.547000000",
+//	"type" : "movie",
+//	"directors" : [
+//		"Georges Mèliès"
+//	],
+//	"imdb" : {
+//		"rating" : 6.6,
+//		"votes" : 580,
+//		"id" : 246
+//	},
+//	"countries" : [
+//		"France"
+//	],
+//	"genres" : [
+//		"Short"
+//	],
+//	"tomatoes" : {
+//		"viewer" : {
+//			"rating" : 3.8,
+//			"numReviews" : 32
+//		},
+//		"lastUpdated" : ISODate("2015-08-20T18:46:44Z")
+//	},
+//	"num_mflix_comments" : 1
+//}
+
+// c)
+// 6 queries of find({},{})
+
+// find every movie and print it with tabs
+db.movies.find().pretty()
+
+// find every movie and show its title and imdb rating and tomatoes viewer rating
+db.movies.find({},{"title":1,"nome":1,"imdb.rating":1,"tomatoes.viewer.rating":1,_id:0})
+
+// count how many movies are from the year 2001
+db.movies.find({"year": 2001}).count()
+
+// find the first 10 earliest movies on the dataset
+db.movies.find({}).sort({"year":1}).limit(10)
+
+// count how many movies have a tomatoes rating bigger than 4
+db.movies.find({ $and: [{"tomatoes.viewer.rating":{$gt:4.9}}]})
+
+// show the movie with the biggest number of imdb votes
+db.movies.find({}).sort({"imdb.votes":1}).limit(1)
+
+// d)
+// 6 queries with agregate
+
+// show how many movies were released per year
+db.movies.aggregate({ $group:{ _id:"$year", count:{$sum:1} } } )
+
+// list movies with tomatoes viewer score average per year
+db.movies.aggregate({ $group:{ _id:"$year", avg:{$avg:"$tomatoes.viewer.rating"} } } )
+
+// list movies with imdb score average per year
+db.movies.aggregate({ $group:{ _id:"$year", avg:{$avg:"$imdb.rating"} } } )
+
+// show list of movies in each genre
+db.movies.aggregate({ $group:{ _id:"$genres", count:{$sum:1} } } )
+
+// show number of movies each director did 
+db.movies.aggregate({ $group:{ _id:"$directors", count:{$sum:1} }})
+
+// Show the movies that are in english with imdb rating bigger than 8, tomatoes viewer rating less than 1 and number of votes + reviews equal to 5
+db.movies.aggregate([{$addFields:{sum: {$sum: ["$imdb.votes","$tomatoes.viewer.numReviews"]}}},{$match: {sum:{$eq: 5}, "languages":"English", "imdb.rating":{$gt:8},"tomatoes.viewer.rating":{$lt:1}}}])
