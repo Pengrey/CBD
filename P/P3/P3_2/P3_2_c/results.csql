@@ -1,0 +1,46 @@
+# 7
+SELECT * FROM videos WHERE author = 'author0';
+
+ author  | description  | tags                    | upload                          | vidname
+---------+--------------+-------------------------+---------------------------------+---------
+ author0 | description0 | ['Action', 'Animation'] | 2021-12-11 21:26:02.122000+0000 |  video0
+
+# 8
+SELECT * FROM comment_by_user ;
+
+ username | timecommented                   | comment  | video
+----------+---------------------------------+----------+--------
+    user8 | 2021-12-11 22:17:29.522000+0000 | comment8 | video8
+    user2 | 2021-12-11 22:17:29.509000+0000 | comment2 | video2
+    user9 | 2021-12-11 22:17:32.341000+0000 | comment9 | video9
+    user4 | 2021-12-11 22:17:29.513000+0000 | comment4 | video4
+    user0 | 2021-12-11 22:17:29.504000+0000 | comment0 | video0
+    user1 | 2021-12-11 22:17:29.507000+0000 | comment1 | video1
+    user7 | 2021-12-11 22:17:29.520000+0000 | comment7 | video7
+    user3 | 2021-12-11 22:17:29.511000+0000 | comment3 | video3
+    user6 | 2021-12-11 22:17:29.518000+0000 | comment6 | video6
+    user5 | 2021-12-11 22:17:29.516000+0000 | comment5 | video5
+
+# 9
+SELECT * FROM videos ;
+
+ author  | description  | tags                      | upload                          | vidname
+---------+--------------+---------------------------+---------------------------------+---------
+ author6 | description6 |    ['Western', 'Musical'] | 2021-12-11 21:26:02.167000+0000 |  video6
+ author1 | description1 |       ['Comedy', 'Crime'] | 2021-12-11 21:26:02.132000+0000 |  video1
+ author8 | description8 |  ['Psychological', 'Spy'] | 2021-12-11 21:26:02.174000+0000 |  video8
+ author5 | description5 |    ['Sci-Fi', 'Thriller'] | 2021-12-11 21:26:02.163000+0000 |  video5
+ author4 | description4 |     ['Horror', 'Romance'] | 2021-12-11 21:26:02.157000+0000 |  video4
+ author3 | description3 | ['Fantasy', 'Historical'] | 2021-12-11 21:26:02.148000+0000 |  video3
+ author0 | description0 |   ['Action', 'Animation'] | 2021-12-11 21:26:02.122000+0000 |  video0
+ author2 | description2 | ['Drama', 'Experimental'] | 2021-12-11 21:26:02.140000+0000 |  video2
+ author9 | description9 |  ['Parody', 'Paranormal'] | 2021-12-11 21:26:02.755000+0000 |  video9
+ author7 | description7 |        ['War', 'Biopics'] | 2021-12-11 21:26:02.171000+0000 |  video7
+
+# 10
+SELECT avg(value) as Average, count(user) as NRatings FROM ratings_by_vid WHERE vidName = 'video0';
+
+ average | nratings
+---------+----------
+       3 |        5
+

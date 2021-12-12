@@ -1,0 +1,76 @@
+# 1
+SELECT * FROM comment_by_vid LIMIT 3;
+
+ video  | timecommented                   | comment  | username
+--------+---------------------------------+----------+----------
+ video2 | 2021-12-11 22:34:36.744000+0000 | comment2 |    user2
+ video6 | 2021-12-11 22:34:36.751000+0000 | comment6 |    user6
+ video0 | 2021-12-11 22:34:36.739000+0000 | comment0 |    user0
+
+# 2
+SELECT tags FROM videos_by_name WHERE vidName = 'video0';
+
+ tags
+-------------------------
+ ['Action', 'Animation']
+
+# 3
+SELECT vidName FROM videos_by_tag WHERE tag = 'Aveiro';
+
+ vidname
+---------
+
+# 4
+SELECT * FROM events_by_vid WHERE vidName = 'video0' LIMIT 5 ;
+
+ vidname | eventname | eventtime                       | eventtimeonvid | user
+---------+-----------+---------------------------------+----------------+-------
+  video0 |     Pause | 2021-12-11 23:12:36.727000+0000 |            100 | user0
+
+# 5
+SELECT * FROM videos WHERE author = 'author0' AND upload = '2021-12-12 01:03:09.619000+0000';
+
+ author  | upload                          | description  | tags                    | vidname
+---------+---------------------------------+--------------+-------------------------+---------
+ author0 | 2021-12-12 01:03:09.619000+0000 | description0 | ['Action', 'Animation'] |  video0
+
+# 6
+# Tried: SELECT * FROM videos ORDER BY description ASC LIMIT 10;
+# Error reason: Partition key is restricted by an EQ or an IN
+
+# 7
+SELECT * FROM followed WHERE vidName = 'video0';
+
+ vidname | followers
+---------+-----------
+  video0 | ['user0']
+
+# 8
+SELECT follows FROM follow WHERE user = 'user0';
+SELECT * FROM comment_by_vid WHERE video = 'video0';
+
+ video  | timecommented                   | comment  | username
+--------+---------------------------------+----------+----------
+ video0 | 2021-12-11 22:34:36.739000+0000 | comment0 |    user0
+
+# 9
+# We cant because of the lack of global querying
+
+# 10
+SELECT * FROM videos;
+
+ author  | upload                          | description  | tags                      | vidname
+---------+---------------------------------+--------------+---------------------------+---------
+ author6 | 2021-12-12 01:11:50.173000+0000 | description6 |    ['Western', 'Musical'] |  video6
+ author1 | 2021-12-12 01:11:50.139000+0000 | description1 |       ['Comedy', 'Crime'] |  video1
+ author8 | 2021-12-12 01:11:50.186000+0000 | description8 |  ['Psychological', 'Spy'] |  video8
+ author5 | 2021-12-12 01:11:50.166000+0000 | description5 |    ['Sci-Fi', 'Thriller'] |  video5
+ author4 | 2021-12-12 01:11:50.159000+0000 | description4 |     ['Horror', 'Romance'] |  video4
+ author3 | 2021-12-12 01:11:50.152000+0000 | description3 | ['Fantasy', 'Historical'] |  video3
+ author0 | 2021-12-12 01:11:50.132000+0000 | description0 |   ['Action', 'Animation'] |  video0
+ author2 | 2021-12-12 01:11:50.146000+0000 | description2 | ['Drama', 'Experimental'] |  video2
+ author9 | 2021-12-12 01:11:50.777000+0000 | description9 |  ['Parody', 'Paranormal'] |  video9
+ author7 | 2021-12-12 01:11:50.179000+0000 | description7 |        ['War', 'Biopics'] |  video7
+
+# 11
+# Lack of agregation doesnt allow us to do this without multiples queries
