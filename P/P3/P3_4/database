@@ -1,0 +1,141 @@
+CREATE KEYSPACE CassEvents WITH replication = {'class':'SimpleStrategy', 'replication_factor' : 3};
+
+USE CassEvents;
+
+CREATE COLUMNFAMILY people (
+    name text,
+    email text,
+    badEvents list<timestamp>,
+    classes map<text, text>,
+    PRIMARY KEY ((email), name)
+);
+
+CREATE COLUMNFAMILY rooms (
+    name text,
+    capacity int,
+    PRIMARY KEY (name, capacity)
+) WITH CLUSTERING ORDER BY (capacity DESC);
+
+CREATE COLUMNFAMILY events (
+    event text,
+    evenTime timestamp,
+    person text,
+    room text,
+    PRIMARY KEY ((event), evenTime)
+)WITH CLUSTERING ORDER BY (evenTime DESC);
+
+CREATE COLUMNFAMILY events_by_room (
+    event text,
+    evenTime timestamp,
+    person text,
+    room text,
+    PRIMARY KEY ((room))
+);
+
+CREATE COLUMNFAMILY events_by_person (
+    event text,
+    evenTime timestamp,
+    person text,
+    room text,
+    PRIMARY KEY ((person))
+);
+
+CREATE COLUMNFAMILY blacklist (
+    room text,
+    restricted set<text>,
+    PRIMARY Key ((room))
+);
+
+INSERT INTO people (name, email, badEvents, classes) VALUES ('user0', 'user0@server.com', [dateof(now())], {'math1':'1.1.1'});
+INSERT INTO people (name, email, badEvents, classes) VALUES ('user1', 'user1@server.com', [dateof(now()),dateof(now()),dateof(now())], {'math1':'1.1.2'});
+INSERT INTO people (name, email, badEvents, classes) VALUES ('user2', 'user2@server.com', [dateof(now()),dateof(now())], {'math1':'1.1.5'});
+INSERT INTO people (name, email, badEvents, classes) VALUES ('user3', 'user3@server.com', [dateof(now()),dateof(now()),dateof(now())], {'math1':'1.1.3'});
+INSERT INTO people (name, email, badEvents, classes) VALUES ('user4', 'user4@server.com', [dateof(now()),dateof(now())], {'math1':'1.1.4'});
+INSERT INTO people (name, email, badEvents, classes) VALUES ('user5', 'user5@server.com', [dateof(now())], {'math1':'1.1.3'});
+INSERT INTO people (name, email, badEvents, classes) VALUES ('user6', 'user6@server.com', [], {'math1':'1.1.2'});
+INSERT INTO people (name, email, badEvents, classes) VALUES ('user7', 'user7@server.com', [dateof(now())], {'math1':'1.1.9'});
+INSERT INTO people (name, email, badEvents, classes) VALUES ('user8', 'user8@server.com', [dateof(now())], {'math1':'1.1.10'});
+INSERT INTO people (name, email, badEvents, classes) VALUES ('user9', 'user9@server.com', [dateof(now())], {'math1':'1.1.11'});
+INSERT INTO people (name, email, badEvents, classes) VALUES ('user10', 'user10@server.com', [dateof(now())], {'math1':'1.1.21'});
+INSERT INTO people (name, email, badEvents, classes) VALUES ('user11', 'user11@server.com', [dateof(now())], {'math1':'12.1.1'});
+
+INSERT INTO rooms (name, capacity) VALUES ('room0', 1);
+INSERT INTO rooms (name, capacity) VALUES ('room1', 2);
+INSERT INTO rooms (name, capacity) VALUES ('room2', 3);
+INSERT INTO rooms (name, capacity) VALUES ('room3', 4);
+INSERT INTO rooms (name, capacity) VALUES ('room4', 5);
+INSERT INTO rooms (name, capacity) VALUES ('room5', 6);
+INSERT INTO rooms (name, capacity) VALUES ('room6', 7);
+INSERT INTO rooms (name, capacity) VALUES ('room7', 8);
+INSERT INTO rooms (name, capacity) VALUES ('room8', 9);
+INSERT INTO rooms (name, capacity) VALUES ('room9', 10);
+INSERT INTO rooms (name, capacity) VALUES ('room10', 11);
+INSERT INTO rooms (name, capacity) VALUES ('room11', 12);
+
+INSERT INTO events (event, evenTime, person, room) VALUES ('enter', dateof(now()), 'person0', '1.1.1');
+INSERT INTO events (event, evenTime, person, room) VALUES ('exit', dateof(now()), 'person1', '1.1.2');
+INSERT INTO events (event, evenTime, person, room) VALUES ('enter', dateof(now()), 'person2', '1.1.3');
+INSERT INTO events (event, evenTime, person, room) VALUES ('exit', dateof(now()), 'person3', '1.1.4');
+INSERT INTO events (event, evenTime, person, room) VALUES ('enter', dateof(now()), 'person4', '1.1.5');
+INSERT INTO events (event, evenTime, person, room) VALUES ('exit', dateof(now()), 'person5', '1.1.6');
+INSERT INTO events (event, evenTime, person, room) VALUES ('enter', dateof(now()), 'person6', '1.1.7');
+INSERT INTO events (event, evenTime, person, room) VALUES ('exit', dateof(now()), 'person7', '1.1.8');
+INSERT INTO events (event, evenTime, person, room) VALUES ('enter', dateof(now()), 'person8', '1.1.9');
+INSERT INTO events (event, evenTime, person, room) VALUES ('exit', dateof(now()), 'person9', '1.1.10');
+INSERT INTO events (event, evenTime, person, room) VALUES ('enter', dateof(now()), 'person10', '1.1.11');
+INSERT INTO events (event, evenTime, person, room) VALUES ('exit', dateof(now()), 'person11', '1.1.12');
+
+INSERT INTO events_by_room (event, evenTime, person, room) VALUES ('enter', dateof(now()), 'person0', '1.1.1');
+INSERT INTO events_by_room (event, evenTime, person, room) VALUES ('exit', dateof(now()), 'person1', '1.1.2');
+INSERT INTO events_by_room (event, evenTime, person, room) VALUES ('enter', dateof(now()), 'person2', '1.1.3');
+INSERT INTO events_by_room (event, evenTime, person, room) VALUES ('exit', dateof(now()), 'person3', '1.1.4');
+INSERT INTO events_by_room (event, evenTime, person, room) VALUES ('enter', dateof(now()), 'person4', '1.1.5');
+INSERT INTO events_by_room (event, evenTime, person, room) VALUES ('exit', dateof(now()), 'person5', '1.1.6');
+INSERT INTO events_by_room (event, evenTime, person, room) VALUES ('enter', dateof(now()), 'person6', '1.1.7');
+INSERT INTO events_by_room (event, evenTime, person, room) VALUES ('exit', dateof(now()), 'person7', '1.1.8');
+INSERT INTO events_by_room (event, evenTime, person, room) VALUES ('enter', dateof(now()), 'person8', '1.1.9');
+INSERT INTO events_by_room (event, evenTime, person, room) VALUES ('exit', dateof(now()), 'person9', '1.1.10');
+INSERT INTO events_by_room (event, evenTime, person, room) VALUES ('enter', dateof(now()), 'person10', '1.1.11');
+INSERT INTO events_by_room (event, evenTime, person, room) VALUES ('exit', dateof(now()), 'person11', '1.1.12');
+
+INSERT INTO events_by_person (event, evenTime, person, room) VALUES ('enter', dateof(now()), 'person0', '1.1.1');
+INSERT INTO events_by_person (event, evenTime, person, room) VALUES ('exit', dateof(now()), 'person1', '1.1.2');
+INSERT INTO events_by_person (event, evenTime, person, room) VALUES ('enter', dateof(now()), 'person2', '1.1.3');
+INSERT INTO events_by_person (event, evenTime, person, room) VALUES ('exit', dateof(now()), 'person3', '1.1.4');
+INSERT INTO events_by_person (event, evenTime, person, room) VALUES ('enter', dateof(now()), 'person4', '1.1.5');
+INSERT INTO events_by_person (event, evenTime, person, room) VALUES ('exit', dateof(now()), 'person5', '1.1.6');
+INSERT INTO events_by_person (event, evenTime, person, room) VALUES ('enter', dateof(now()), 'person6', '1.1.7');
+INSERT INTO events_by_person (event, evenTime, person, room) VALUES ('exit', dateof(now()), 'person7', '1.1.8');
+INSERT INTO events_by_person (event, evenTime, person, room) VALUES ('enter', dateof(now()), 'person8', '1.1.9');
+INSERT INTO events_by_person (event, evenTime, person, room) VALUES ('exit', dateof(now()), 'person9', '1.1.10');
+INSERT INTO events_by_person (event, evenTime, person, room) VALUES ('enter', dateof(now()), 'person10', '1.1.11');
+INSERT INTO events_by_person (event, evenTime, person, room) VALUES ('exit', dateof(now()), 'person11', '1.1.12');
+
+INSERT INTO blacklist (room, restricted) VALUES ('1.1.1', {'person0'});
+INSERT INTO blacklist (room, restricted) VALUES ('1.1.2', {'person1'});
+INSERT INTO blacklist (room, restricted) VALUES ('1.1.3', {'person2','person1'});
+INSERT INTO blacklist (room, restricted) VALUES ('1.1.4', {'person3','person1'});
+INSERT INTO blacklist (room, restricted) VALUES ('1.1.5', {'person4','person1','person3'});
+INSERT INTO blacklist (room, restricted) VALUES ('1.1.6', {'person5','person1'});
+INSERT INTO blacklist (room, restricted) VALUES ('1.1.7', {'person6','person1'});
+INSERT INTO blacklist (room, restricted) VALUES ('1.1.8', {'person7','person1'});
+INSERT INTO blacklist (room, restricted) VALUES ('1.1.9', {'person8','person1'});
+INSERT INTO blacklist (room, restricted) VALUES ('1.1.10', {'person9','person1'});
+INSERT INTO blacklist (room, restricted) VALUES ('1.1.12', {'person10','person1'});
+INSERT INTO blacklist (room, restricted) VALUES ('1.1.13', {'person11, person1'});
+DELETE FROM blacklist WHERE room = '1.1.13';
+INSERT INTO blacklist (room, restricted) VALUES ('1.1.13', {'person11, person1'});
+DELETE FROM blacklist WHERE room = '1.1.13';
+INSERT INTO blacklist (room, restricted) VALUES ('1.1.13', {'person11, person1'});
+DELETE FROM blacklist WHERE room = '1.1.13';
+INSERT INTO blacklist (room, restricted) VALUES ('1.1.13', {'person11, person1'});
+DELETE FROM blacklist WHERE room = '1.1.13';
+INSERT INTO blacklist (room, restricted) VALUES ('1.1.13', {'person11, person1'});
+DELETE FROM blacklist WHERE room = '1.1.13';
+INSERT INTO blacklist (room, restricted) VALUES ('1.1.13', {'person11, person1'});
+UPDATE blacklist SET restricted = {'person11'} WHERE room = '1.1.13';
+UPDATE blacklist SET restricted = {'person11, person1'} WHERE room = '1.1.13';
+UPDATE blacklist SET restricted = {'person11'} WHERE room = '1.1.13';
+UPDATE blacklist SET restricted = {'person11, person1'} WHERE room = '1.1.13';
+UPDATE blacklist SET restricted = {'person11'} WHERE room = '1.1.13';
+UPDATE blacklist SET restricted = {'person11, person1'} WHERE room = '1.1.13';
