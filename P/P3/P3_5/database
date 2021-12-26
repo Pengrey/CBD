@@ -1,0 +1,23 @@
+CREATE KEYSPACE Restaurants WITH replication = {'class':'SimpleStrategy', 'replication_factor' : 3};
+
+USE Restaurants;
+
+CREATE COLUMNFAMILY restaurants_by_id (
+    name text,
+    id text,
+    localidade text,
+    gastronomia text,
+    zipcode text,
+    PRIMARY KEY (id)
+);
+
+CREATE COLUMNFAMILY restaurants_by_location (
+    name text,
+    id text,
+    localidade text,
+    gastronomia text,
+    zipcode text,
+    PRIMARY KEY (localidade)
+);
+
+INSERT INTO restaurants_by_id (id, capacity) VALUES ('room0', 1);
