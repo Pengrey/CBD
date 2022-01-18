@@ -1,0 +1,58 @@
+#a
+// We will have two types of entities:
+//  User with svn_id, real_name and organization
+//  Project with name
+// We will also have one type of relation:
+//  Commited [User->Project] - num, role_on_project
+#b
+CREATE CONSTRAINT ON (project:Project) ASSERT project.project_name IS UNIQUE
+CREATE CONSTRAINT ON (user:Member) ASSERT user.svn_id IS UNIQUE
+//
+// Insert nodes
+LOAD CSV WITH HEADERS
+FROM "file:///git_selection.csv" AS Row
+MERGE (user:Member {svn_id: Row.svn_id})
+MERGE (project:Project {project_name: Row.project_name})
+SET user.real_name=Row.real_name, user.organization=Row.organization
+//
+// Insert relations
+LOAD CSV WITH HEADERS
+FROM "file:///git_selection.csv" AS Row
+MATCH (user:Member {svn_id: Row.svn_id}),(project:Project {project_name:Row.project_name})
+CREATE (user)-[:COMMITED {num: Row.num, role_on_project: Row.role_on_project}]->(project)
+//c
+#1
+MATCH (user:Member)
+RETURN DISTINCT user.svn_id, user.real_name, user.organization
+#2
+MATCH (user:Member)
+RETURN DISTINCT user.real_name
+#3
+MATCH ()-[r:COMMITED]->(project:Project)
+WITH project, count(r) as commits
+WHERE commits > 0
+RETURN DISTINCT project
+#4
+MATCH (user:Member)-[r:COMMITED]->()
+WITH user, count(r) as commits
+RETURN DISTINCT user, commits
+#5
+MATCH (user:Member)-[r:COMMITED]->()
+WITH user, count(r) as commits
+RETURN user, commits
+ORDER BY commits DESC
+#6
+MATCH (user:Member)-[r:COMMITED]->(project:Project)
+WITH project, count(DISTINCT user) as members
+RETURN project, members
+#7
+MATCH (user:Member)-[r:COMMITED]->(project:Project)
+WHERE r.role_on_project = "Committer"
+WITH project, count(DISTINCT user) as commiters
+RETURN project, commiters
+#8
+MATCH (atm:Member {svn_id:"atm"})-[:COMMITED]->(project:Project)<-[:COMMITED]-(user:Member)
+RETURN atm.real_name, user.real_name, project.project_name
+#9
+MATCH (id1:Member {svn_id:"atm"})-[:COMMITED {role_on_project: "PMC"}]->(project:Project)<-[:COMMITED {role_on_project: "Committer"}]-(user:Member)
+RETURN user

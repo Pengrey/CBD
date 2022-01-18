@@ -1,0 +1,97 @@
+// NMEC: 98475
+#1
+MATCH (actor)-[:ACTED_IN]->(movie)<-[:DIRECTED]-(actor)
+RETURN DISTINCT actor.name as name, movie.title as title;
+#2
+MATCH (actor)-[:ACTED_IN]->(movie)
+WHERE movie.released > 2005
+RETURN movie, COLLECT(actor);
+#3
+MATCH (actor)-[relation]->(movie)
+WITH actor, count(relation) AS count
+WHERE count > 1
+MATCH (actor)-[relation]->(movie)
+RETURN actor,relation,movie;
+#4
+MATCH (a1)-[:REVIEWED]->(m)<-[:REVIEWED]-(a2)
+RETURN m.title, a1.name, a2.name;
+// or if we just want non repeted pares
+// MATCH (a1)-[:REVIEWED]->(m)<-[:REVIEWED]-(a2)
+// RETURN m.title, COLLECT(DISTINCT a1.name);
+#5
+MATCH (a1)-[r1:ACTED_IN]->(movie)<-[r2:ACTED_IN]-(a2)
+WITH a1, count(r1) AS count1, a2, count(r2) AS count2
+WHERE count1 > 1 and count2 > 1
+MATCH (a1)-[r1:ACTED_IN]->(movie)<-[r2:ACTED_IN]-(a2)
+RETURN a1.name, a2.name, collect(distinct movie.title);
+#6
+MATCH (actor)-[:ACTED_IN]->(movie)
+WHERE movie.title="Apollo 13"
+RETURN avg(date.realtime().year - actor.born);
+#7
+MATCH (actor)-[:ACTED_IN]->(movie)
+WITH movie, (movie.released - avg(actor.born)) as avg_delta
+RETURN DISTINCT movie.title as title, round(avg_delta*100)/100 as avg_age
+ORDER BY avg_age DESC
+LIMIT 10;
+#8
+MATCH (actor)-[:ACTED_IN]->(movie)
+WITH movie, (movie.released - avg(actor.born)) as avg_delta
+ORDER BY avg_delta
+LIMIT 1
+MATCH (actor)-[:ACTED_IN]->(movie)
+RETURN movie, actor;
+#9
+MATCH path=shortestPath((from {name:"John Cusack"})-[*..10]-(to {name:"Demi Moore"}))
+RETURN path
+LIMIT 1
+#10
+MATCH path=shortestPath((from {name:"Keanu Reeves"})-[*..10]-(to {name:"Tom Cruise"}))
+RETURN MIN(length(path)) + 1 as Dimension
+#11
+MATCH path=shortestPath((from:Person)-[*..10]-(to:Person))
+WHERE from.name STARTS WITH 'Jim' and to.name STARTS WITH 'Kevin'
+RETURN MIN(length(path)) + 1 as Dimension
+#12
+MATCH path=shortestPath((from:Person)-[*..2]-(to:Person {name:"Jim Cash"}))
+WHERE from <> to and length(path) = 2
+RETURN DISTINCT from.name
+#13
+MATCH path=shortestPath((from:Person)-[*..10]-(to:Person {name:"Kevin Bacon"}))
+WHERE from <> to
+RETURN MAX(length(path)) + 1
+#14
+MATCH path=shortestPath((from:Person)-[*1..11]-(to:Person))
+WHERE from <> to
+RETURN MAX(length(path)) + 1
+#15
+MATCH path=shortestPath((from:Person)-[*..11]-(to:Person))
+WHERE from <> to
+WITH length(path) + 1 as Distance
+RETURN Distance, count(Distance) as Distance_Count
+#16
+MATCH path=shortestPath((from:Person)-[:ACTED_IN*..11]-(to:Person))
+WHERE from <> to
+RETURN DISTINCT from.name, avg(length(path) + 1) as Distance_Avg
+ORDER BY Distance_Avg
+LIMIT 10
+#17
+// Get the movie with the biggest cast
+MATCH (actor)-[:ACTED_IN]->(movie)
+RETURN movie.title, count(Distinct actor) as castNum
+ORDER BY castNum DESC
+LIMIT 1
+#18
+// Get the most busy actor (actor who acted the most)
+MATCH (actor)-[:ACTED_IN]->(movie)
+RETURN actor, count(Distinct movie) as casted
+ORDER BY casted DESC
+LIMIT 1
+#19
+// Get all the writers
+MATCH (writer)-[:WROTE]->(movie)
+RETURN Distinct writer.name
+#20
+// Get all the movies and their taglines
+MATCH ()-[]->(movie:MOVIE)
+RETURN Distinct movie.title, movie.tagline
