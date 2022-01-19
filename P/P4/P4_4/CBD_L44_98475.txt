@@ -1,0 +1,151 @@
+Query:
+MATCH (console:Console) RETURN console.name
+
+Out:
+[('console.name', 'Nintendo DS')]
+[('console.name', 'Sony PSP')]
+[('console.name', 'X360')]
+[('console.name', 'Nintendo Wii')]
+[('console.name', 'PlayStation 3')]
+
+Query:
+MATCH (game)-[:PublishedOn]->(console) WHERE console.name="PlayStation 3" RETURN console.name, collect(DISTINCT game.title)
+
+Out:
+[('console.name', 'PlayStation 3'), ('collect(DISTINCT game.title)', ['Hellboy: The Science of Evil', 'Soldier of Fortune: Payback', 'Fantastic Four: Rise of the Silver Surfer', 'SOCOM: U.S. Navy SEALs - Confrontation', 'Burnout Paradise', 'Hot Shots Golf: Out of Bounds', 'Dark Sector', 'MLB 07: The Show', 'Fallout 3', 'Spider-Man: Web of Shadows', 'MotorStorm: Pacific Rift', 'Shaun White Snowboarding', 'Madden NFL 09', 'The Elder Scrolls IV: Oblivion', 'Need for Speed: Undercover', 'NBA 09: The Inside', 'Dynasty Warriors: Gundam', "Tony Hawk's Proving Ground", 'UEFA Euro 2008', 'Call of Duty: World at War', 'Armored Core: For Answer', 'Time Crisis 4', 'GRID', 'Dynasty Warriors 6', "Tom Clancy's Splinter Cell: Double Agent", 'NBA Live 08', "Mirror's Edge", 'Wall-E', 'Full Auto 2: Battlelines', 'NBA 2K8', "Tom Clancy's Ghost Recon: Advanced Warfighter 2...", 'NHL 2K8', 'Legendary', 'Spider-Man 3', 'Star Wars: The Force Unleashed', "Tom Clancy's EndWar", 'Sonic the Hedgehog', 'SoulCalibur IV', 'BioShock', 'Valkyria Chronicles', 'Genji: Days of the Blade', 'NBA 08', 'Mortal Kombat vs. DC Universe', 'Midnight Club: Los Angeles', 'MLB 08: The Show', 'The Simpsons Game', 'Eternal Sonata', 'F.E.A.R.: First Encounter Assault Recon', 'All-Pro Football 2K8', 'MotoGP 08', 'Blazing Angels 2: Secret Missions of WWII', 'Facebreaker', 'Saints Row 2', 'Virtua Fighter 5', 'Mercenaries 2: World in Flames', 'Tiger Woods PGA Tour 08', 'NFL Tour', 'Guitar Hero: Aerosmith', 'Viking: Battle for Asgard', 'SingStar ABBA', 'Ferrari Challenge Trofeo Pirelli', 'Dead Space', 'NCAA Football 09', 'Vampire Rain', 'Grand Theft Auto IV', 'Far Cry 2', 'Armored Core 4', "Disney Pirates of the Caribbean: At World's End", 'Devil May Cry 4', 'Marvel Ultimate Alliance', 'Madagascar: Escape 2 Africa', 'Ridge Racer 7', 'Enemy Territory: Quake Wars', 'Army of Two', 'Sonic Unleashed', 'DiRT', "Uncharted: Drake's Fortune", 'Kung Fu Panda', 'Fracture', 'Resistance 2', 'Lair', 'Gran Turismo 5: Prologue', 'Top Spin 3', 'BlackSite: Area 51', 'Call of Duty 3', 'Madden NFL 07', 'Pro Evolution Soccer 2008', "Tom Clancy's Rainbow Six: Vegas", 'The Incredible Hulk', 'MotorStorm', 'Tiger Woods PGA Tour 07', 'Tomb Raider: Underworld', 'NBA Street Homecourt', 'Overlord: Raising Hell', 'Guitar Hero: World Tour', 'Ratatouille', 'Madden NFL 08', 'Lost: Via Domus', 'TNA iMPACT!', 'Ninja Gaiden Sigma', 'The Eye of Judgment', 'The Golden Compass', 'LittleBigPlanet', 'Hail to the Chimp', 'NFL Head Coach 09', 'Battlefield: Bad Company', 'Ratchet & Clank Future: Tools of Destruction', 'SEGA Rally Revo', 'Sega Superstars Tennis', 'The Darkness', 'TimeShift', 'Stuntman: Ignition', 'NCAA Football 08', 'Pure', 'NASCAR 09', "Tony Hawk's Project 8", 'Unreal Tournament III', 'Transformers: The Game', 'Resistance: Fall of Man', 'NBA 2K9', 'Condemned 2: Bloodshot', "Assassin's Creed", 'Blitz: The League II', 'Need for Speed: ProStreet', "Tom Clancy's Rainbow Six: Vegas 2", 'NCAA March Madness 08', 'FIFA Street 3', 'Silent Hill: Homecoming', 'NHL 09', 'Dragon Ball Z: Burst Limit', 'Conflict: Denied Ops', 'LEGO Batman: The Videogame', 'Need for Speed: Carbon', 'Def Jam: Icon', 'College Hoops 2K7', 'Lost Planet: Extreme Condition', 'SingStar', 'Prince of Persia', 'Conan', 'Call of Duty 4: Modern Warfare', 'Heavenly Sword', 'AC/DC Live: Rock Band - Track Pack', 'NBA 2K7', 'Juiced 2: Hot Import Nights', 'Blazing Angels: Squadrons of WWII', 'LEGO Indiana Jones: The Original Adventures', 'MX vs. ATV Untamed', 'Beowulf: The Game', 'Kane & Lynch: Dead Men', 'NASCAR 08', 'LEGO Star Wars: The Complete Saga', 'Virtua Tennis 3', 'WWE Smackdown vs. Raw 2008', 'Rock Band 2', 'Tiger Woods PGA Tour 09', "Surf's Up", 'NBA Ballers: Chosen One', 'Folklore', 'Turok', 'Iron Man', 'NHL 08', 'Haze', 'Harry Potter and the Order of the Phoenix', 'College Hoops 2K8', 'Fight Night Round 3', 'Rock Band', 'NHL 2K9', 'Untold Legends: Dark Kingdom', 'Afrika', 'Baja: Edge of Control', 'Metal Gear Solid 4: Guns of the Patriots', "Brothers in Arms: Hell's Highway", 'The Club', "Bladestorm: The Hundred Years' War", 'Enchanted Arms', 'NBA 07', 'Major League Baseball 2K7', 'The BIGS', 'Turning Point: Fall of Liberty'])]
+
+Query:
+MATCH (game)-[:PublishedBy]->(pub) WHERE pub.companyName = "Nintendo" RETURN collect(DISTINCT game.title)
+
+Out:
+[('collect(DISTINCT game.title)', ['Clubhouse Games', 'Polarium', 'Pokmon: Platinum Version', 'Super Paper Mario', 'Animal Crossing: City Folk', 'Custom Robo Arena', 'Pokmon Ranger', 'Donkey Kong Barrel Blast', 'Wii Fit', 'Pokmon Mystery Dungeon: Explorers of Time', 'Picross DS', 'Mario Kart DS', 'Fire Emblem: Shadow Dragon', 'The Legend of Zelda: Phantom Hourglass', 'Kororinpa: Marble Mania', 'Diddy Kong Racing DS', 'Kirby: Canvas Curse', 'Endless Ocean', "Link's Crossbow Training", 'Super Princess Peach', 'Metroid Prime: Hunters', 'Mystery Case Files: MillionHeir', 'Mario Hoops 3 on 3', 'Big Brain Academy', 'Wario: Master of Disguise', 'Advance Wars: Dual Strike', 'New Super Mario Bros.', 'Metroid Prime 3: Corruption', 'Kirby: Squeak Squad', 'Kirby Super Star Ultra', 'Animal Crossing: Wild World', 'Pokmon Mystery Dungeon: Explorers of Darkness', 'Metroid Prime Pinball', 'Mario Party 8', 'Mario Kart Wii', 'Brain Agey: More Training in Minutes a Day!', 'Master of Illusion', 'Trauma Center: Under the Knife', 'The Legendary Starfy', 'Excite Truck', 'Trauma Center: Second Opinion', 'The Legend of Zelda: Twilight Princess', 'Pokmon Battle Revolution', 'Wario Land: Shake It!', 'Pokmon Ranger: Shadows of Almia', 'Hotel Dusk: Room 215', 'Pokmon Mystery Dungeon: Blue Rescue Team', 'Electroplankton', 'Super Mario 64 DS', 'Mario Strikers Charged', "Yoshi's Island DS", 'Planet Puzzle League', 'Fire Emblem: Radiant Dawn', 'Advance Wars: Days of Ruin', 'Super Smash Bros.: Brawl', 'Meteos', 'Mario Party DS', 'Wii Play', 'Rhythm Heaven', 'Etrian Odyssey', 'Tenchu: Dark Secret', 'Super Mario Galaxy', 'Pokmon Dash', 'Big Brain Academy: Wii Degree', 'Elite Beat Agents', 'WarioWare Touched!', 'Pokmon Pearl', 'Brain Age: Train Your Brain in Minutes a Day!', 'Trauma Center: New Blood', 'Flash Focus: Vision Training in Minutes a Day', 'Mario & Luigi: Partners in Time', 'Pokmon Trozei!', 'Pokmon Diamond', 'BWii: Battalion Wars 2', 'DK: Jungle Climber', 'WarioWare: Smooth Moves', 'Mario vs. Donkey Kong 2: March of the Minis', 'Nintendogs', 'Magnetica', 'Magical Starsign', 'True Swing Golf', 'Tetris DS', 'Professor Layton and the Curious Village', 'Star Fox Command', 'Yoshi Touch & Go'])]
+
+Query:
+MATCH (game)-[r:PublishedBy]->(pub) WITH pub, count(r) AS countPub RETURN pub, countPub ORDER BY countPub DESC LIMIT 1
+
+Out:
+[('pub', <Node id=45923 labels=frozenset({'Publisher'}) properties={'companyName': 'EA'}>), ('countPub', 2310)]
+
+Query:
+MATCH (game)-[r:PublishedIn]->(year) RETURN Distinct year.yearName
+
+Out:
+[('year.yearName', '2004')]
+[('year.yearName', '2005')]
+[('year.yearName', '2006')]
+[('year.yearName', '2007')]
+[('year.yearName', '2008')]
+
+Query:
+MATCH (game)-[r:PublishedIn]->(year) WITH year ,count(DISTINCT game) as countGames RETURN year.yearName, countGames ORDER BY countGames DESC LIMIT 1
+
+Out:
+[('year.yearName', '2007'), ('countGames', 302)]
+
+Query:
+MATCH (game)-[:PublishedBy]->(pub) WHERE pub.companyName = \"Nintendo\" RETURN collect(DISTINCT game.Release_Rating)
+
+Out:
+[('collect(DISTINCT game.Release_Rating)', ['E', 'T', 'M'])]
+
+Query:
+MATCH (game)-[:PublishedBy]->(pub) WHERE pub.companyName = "Nintendo" RETURN game.title, collect(DISTINCT game.Metadata_Genres)
+
+Out:
+[('game.title', 'Clubhouse Games'), ('collect(DISTINCT game.Metadata_Genres)', ['Strategy'])]
+[('game.title', 'Polarium'), ('collect(DISTINCT game.Metadata_Genres)', ['Strategy'])]
+[('game.title', 'Pokmon: Platinum Version'), ('collect(DISTINCT game.Metadata_Genres)', ['Adventure,Role-Playing (RPG)'])]
+[('game.title', 'Super Paper Mario'), ('collect(DISTINCT game.Metadata_Genres)', ['Action,Role-Playing (RPG)'])]
+[('game.title', 'Animal Crossing: City Folk'), ('collect(DISTINCT game.Metadata_Genres)', ['Simulation'])]
+[('game.title', 'Custom Robo Arena'), ('collect(DISTINCT game.Metadata_Genres)', ['Action,Role-Playing (RPG)'])]
+[('game.title', 'Pokmon Ranger'), ('collect(DISTINCT game.Metadata_Genres)', ['Role-Playing (RPG)'])]
+[('game.title', 'Donkey Kong Barrel Blast'), ('collect(DISTINCT game.Metadata_Genres)', ['Racing / Driving'])]
+[('game.title', 'Wii Fit'), ('collect(DISTINCT game.Metadata_Genres)', ['Educational,Sports'])]
+[('game.title', 'Pokmon Mystery Dungeon: Explorers of Time'), ('collect(DISTINCT game.Metadata_Genres)', ['Role-Playing (RPG)'])]
+[('game.title', 'Picross DS'), ('collect(DISTINCT game.Metadata_Genres)', ['Strategy'])]
+[('game.title', 'Mario Kart DS'), ('collect(DISTINCT game.Metadata_Genres)', ['Racing / Driving'])]
+[('game.title', 'Fire Emblem: Shadow Dragon'), ('collect(DISTINCT game.Metadata_Genres)', ['Role-Playing (RPG),Strategy'])]
+[('game.title', 'The Legend of Zelda: Phantom Hourglass'), ('collect(DISTINCT game.Metadata_Genres)', ['Action'])]
+[('game.title', 'Kororinpa: Marble Mania'), ('collect(DISTINCT game.Metadata_Genres)', ['Action,Strategy'])]
+[('game.title', 'Diddy Kong Racing DS'), ('collect(DISTINCT game.Metadata_Genres)', ['Racing / Driving,Sports'])]
+[('game.title', 'Kirby: Canvas Curse'), ('collect(DISTINCT game.Metadata_Genres)', ['Action'])]
+[('game.title', 'Endless Ocean'), ('collect(DISTINCT game.Metadata_Genres)', ['Simulation'])]
+[('game.title', "Link's Crossbow Training"), ('collect(DISTINCT game.Metadata_Genres)', ['Action'])]
+[('game.title', 'Super Princess Peach'), ('collect(DISTINCT game.Metadata_Genres)', ['Action'])]
+[('game.title', 'Metroid Prime: Hunters'), ('collect(DISTINCT game.Metadata_Genres)', ['Action'])]
+[('game.title', 'Mystery Case Files: MillionHeir'), ('collect(DISTINCT game.Metadata_Genres)', ['Adventure'])]
+[('game.title', 'Mario Hoops 3 on 3'), ('collect(DISTINCT game.Metadata_Genres)', ['Sports'])]
+[('game.title', 'Big Brain Academy'), ('collect(DISTINCT game.Metadata_Genres)', ['Action'])]
+[('game.title', 'Wario: Master of Disguise'), ('collect(DISTINCT game.Metadata_Genres)', ['Action'])]
+[('game.title', 'Advance Wars: Dual Strike'), ('collect(DISTINCT game.Metadata_Genres)', ['Strategy'])]
+[('game.title', 'New Super Mario Bros.'), ('collect(DISTINCT game.Metadata_Genres)', ['Action'])]
+[('game.title', 'Metroid Prime 3: Corruption'), ('collect(DISTINCT game.Metadata_Genres)', ['Action'])]
+[('game.title', 'Kirby: Squeak Squad'), ('collect(DISTINCT game.Metadata_Genres)', ['Action'])]
+[('game.title', 'Kirby Super Star Ultra'), ('collect(DISTINCT game.Metadata_Genres)', ['Action'])]
+[('game.title', 'Animal Crossing: Wild World'), ('collect(DISTINCT game.Metadata_Genres)', ['Simulation'])]
+[('game.title', 'Pokmon Mystery Dungeon: Explorers of Darkness'), ('collect(DISTINCT game.Metadata_Genres)', ['Role-Playing (RPG)'])]
+[('game.title', 'Metroid Prime Pinball'), ('collect(DISTINCT game.Metadata_Genres)', ['Action,Simulation'])]
+[('game.title', 'Mario Party 8'), ('collect(DISTINCT game.Metadata_Genres)', ['Action,Strategy'])]
+[('game.title', 'Mario Kart Wii'), ('collect(DISTINCT game.Metadata_Genres)', ['Racing / Driving'])]
+[('game.title', 'Brain Agey: More Training in Minutes a Day!'), ('collect(DISTINCT game.Metadata_Genres)', ['Action'])]
+[('game.title', 'Master of Illusion'), ('collect(DISTINCT game.Metadata_Genres)', ['Strategy'])]
+[('game.title', 'Trauma Center: Under the Knife'), ('collect(DISTINCT game.Metadata_Genres)', ['Action,Simulation'])]
+[('game.title', 'The Legendary Starfy'), ('collect(DISTINCT game.Metadata_Genres)', ['Action,Adventure'])]
+[('game.title', 'Excite Truck'), ('collect(DISTINCT game.Metadata_Genres)', ['Racing / Driving'])]
+[('game.title', 'Trauma Center: Second Opinion'), ('collect(DISTINCT game.Metadata_Genres)', ['Action,Simulation'])]
+[('game.title', 'The Legend of Zelda: Twilight Princess'), ('collect(DISTINCT game.Metadata_Genres)', ['Action,Role-Playing (RPG)'])]
+[('game.title', 'Pokmon Battle Revolution'), ('collect(DISTINCT game.Metadata_Genres)', ['Action,Strategy'])]
+[('game.title', 'Wario Land: Shake It!'), ('collect(DISTINCT game.Metadata_Genres)', ['Action'])]
+[('game.title', 'Pokmon Ranger: Shadows of Almia'), ('collect(DISTINCT game.Metadata_Genres)', ['Action,Role-Playing (RPG)'])]
+[('game.title', 'Hotel Dusk: Room 215'), ('collect(DISTINCT game.Metadata_Genres)', ['Adventure'])]
+[('game.title', 'Pokmon Mystery Dungeon: Blue Rescue Team'), ('collect(DISTINCT game.Metadata_Genres)', ['Role-Playing (RPG)'])]
+[('game.title', 'Electroplankton'), ('collect(DISTINCT game.Metadata_Genres)', ['Simulation'])]
+[('game.title', 'Super Mario 64 DS'), ('collect(DISTINCT game.Metadata_Genres)', ['Action'])]
+[('game.title', 'Mario Strikers Charged'), ('collect(DISTINCT game.Metadata_Genres)', ['Action,Sports'])]
+[('game.title', "Yoshi's Island DS"), ('collect(DISTINCT game.Metadata_Genres)', ['Action'])]
+[('game.title', 'Planet Puzzle League'), ('collect(DISTINCT game.Metadata_Genres)', ['Strategy'])]
+[('game.title', 'Fire Emblem: Radiant Dawn'), ('collect(DISTINCT game.Metadata_Genres)', ['Role-Playing (RPG),Strategy'])]
+[('game.title', 'Advance Wars: Days of Ruin'), ('collect(DISTINCT game.Metadata_Genres)', ['Strategy'])]
+[('game.title', 'Super Smash Bros.: Brawl'), ('collect(DISTINCT game.Metadata_Genres)', ['Action'])]
+[('game.title', 'Meteos'), ('collect(DISTINCT game.Metadata_Genres)', ['Strategy'])]
+[('game.title', 'Mario Party DS'), ('collect(DISTINCT game.Metadata_Genres)', ['Action,Strategy'])]
+[('game.title', 'Wii Play'), ('collect(DISTINCT game.Metadata_Genres)', ['Action,Sports'])]
+[('game.title', 'Rhythm Heaven'), ('collect(DISTINCT game.Metadata_Genres)', ['Action'])]
+[('game.title', 'Etrian Odyssey'), ('collect(DISTINCT game.Metadata_Genres)', ['Role-Playing (RPG)'])]
+[('game.title', 'Tenchu: Dark Secret'), ('collect(DISTINCT game.Metadata_Genres)', ['Action'])]
+[('game.title', 'Super Mario Galaxy'), ('collect(DISTINCT game.Metadata_Genres)', ['Action'])]
+[('game.title', 'Pokmon Dash'), ('collect(DISTINCT game.Metadata_Genres)', ['Racing / Driving'])]
+[('game.title', 'Big Brain Academy: Wii Degree'), ('collect(DISTINCT game.Metadata_Genres)', ['Action'])]
+[('game.title', 'Elite Beat Agents'), ('collect(DISTINCT game.Metadata_Genres)', ['Action'])]
+[('game.title', 'WarioWare Touched!'), ('collect(DISTINCT game.Metadata_Genres)', ['Action,Racing / Driving,Sports'])]
+[('game.title', 'Pokmon Pearl'), ('collect(DISTINCT game.Metadata_Genres)', ['Role-Playing (RPG)'])]
+[('game.title', 'Brain Age: Train Your Brain in Minutes a Day!'), ('collect(DISTINCT game.Metadata_Genres)', ['Action'])]
+[('game.title', 'Trauma Center: New Blood'), ('collect(DISTINCT game.Metadata_Genres)', ['Action,Simulation'])]
+[('game.title', 'Flash Focus: Vision Training in Minutes a Day'), ('collect(DISTINCT game.Metadata_Genres)', ['Action'])]
+[('game.title', 'Mario & Luigi: Partners in Time'), ('collect(DISTINCT game.Metadata_Genres)', ['Action,Role-Playing (RPG)'])]
+[('game.title', 'Pokmon Trozei!'), ('collect(DISTINCT game.Metadata_Genres)', ['Strategy'])]
+[('game.title', 'Pokmon Diamond'), ('collect(DISTINCT game.Metadata_Genres)', ['Role-Playing (RPG)'])]
+[('game.title', 'BWii: Battalion Wars 2'), ('collect(DISTINCT game.Metadata_Genres)', ['Action,Simulation,Strategy'])]
+[('game.title', 'DK: Jungle Climber'), ('collect(DISTINCT game.Metadata_Genres)', ['Action,Strategy'])]
+[('game.title', 'WarioWare: Smooth Moves'), ('collect(DISTINCT game.Metadata_Genres)', ['Action,Racing / Driving,Sports'])]
+[('game.title', 'Mario vs. Donkey Kong 2: March of the Minis'), ('collect(DISTINCT game.Metadata_Genres)', ['Action'])]
+[('game.title', 'Nintendogs'), ('collect(DISTINCT game.Metadata_Genres)', ['Simulation'])]
+[('game.title', 'Magnetica'), ('collect(DISTINCT game.Metadata_Genres)', ['Action,Strategy'])]
+[('game.title', 'Magical Starsign'), ('collect(DISTINCT game.Metadata_Genres)', ['Role-Playing (RPG)'])]
+[('game.title', 'True Swing Golf'), ('collect(DISTINCT game.Metadata_Genres)', ['Sports'])]
+[('game.title', 'Tetris DS'), ('collect(DISTINCT game.Metadata_Genres)', ['Strategy'])]
+[('game.title', 'Professor Layton and the Curious Village'), ('collect(DISTINCT game.Metadata_Genres)', ['Adventure,Educational,Strategy'])]
+[('game.title', 'Star Fox Command'), ('collect(DISTINCT game.Metadata_Genres)', ['Action'])]
+[('game.title', 'Yoshi Touch & Go'), ('collect(DISTINCT game.Metadata_Genres)', ['Action'])]
+
+Query:
+MATCH (game)-[:PublishedBy]->(pub) WITH game.Metadata_Genres as genres, count(game.Metadata_Genres) as countG RETURN genres, countG ORDER BY countG DESC LIMIT 1
+
+Out:
+[('genres', 'Action'), ('countG', 24531)]
+
+Query:
+MATCH (game)-[:PublishedOn]->(console) WHERE console.name="PlayStation 3" and game.Metadata_Genres="Action" and game.Metadata_Publishers="EA" RETURN collect(DISTINCT game.title)
+
+Out:
+[('collect(DISTINCT game.title)', ["Mirror's Edge", 'The Simpsons Game', 'Mercenaries 2: World in Flames', 'Dead Space', 'Army of Two', 'Battlefield: Bad Company', 'Def Jam: Icon', 'Harry Potter and the Order of the Phoenix'])]
